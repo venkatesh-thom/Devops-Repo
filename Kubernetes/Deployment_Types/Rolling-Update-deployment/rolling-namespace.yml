@@ -1,0 +1,4 @@
+apiVersion: v1
+kind: NameSpace
+metadat: 
+  name: rolling-ns

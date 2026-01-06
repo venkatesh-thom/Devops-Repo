@@ -1,0 +1,18 @@
+# EKS cluster configuration using eksctl
+
+apiVersion: eksctl.io/v1alpha5        # API version for eksctl cluster configuration schema
+kind: ClusterConfig                   # Specifies that this file defines a cluster configuration
+
+metadata:                              # Metadata section for basic cluster details
+    name: app1-ns                 # Name of the EKS cluster
+    region: us-east-1                  # AWS region where the cluster will be created
+
+# Networking configuration
+networking:
+  disableDefaultCNI: true   # disables the default Amazon VPC CNI
+
+managedNodeGroups:                     # Defines the managed node groups in the EKS cluster
+  - name: app1-ns                # Name of the node group
+    instanceTypes: ["c7i-flex.large", "m7i-flex.large" ]  # List of EC2 instance types allowed for nodes
+    desiredCapacity: 2                 # Desired number of worker nodes (default is 3)
+    spot: true                         # Use Spot Instances to reduce cost

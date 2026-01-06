@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+meatadata:
+  name: online-shop
+  namespace: rolling-ns 
+  labels:
+    app: online-shop 
+spec:
+  replicas: 3 
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1             # Optional - 1 extra Pod can be created during update
+      maxUnavailable: 0       # Optional - 0 unavailable Pods ensure 0 Downtime
+  slector:
+    matchLabels:
+      app: online-shop 
+  template:
+    meatadata:
+      labels:
+        app: online-shop  
+    spec: 
+      containers:
+      - name: online-shop
+        image: amitabhdevops/online_shop
+        ports:
+          - protocol: TCP
+            containerPort: 3000
+        resources:
+          requests:
+          cpu: "200m"
+          memory: "256Mi"
+
+        limits:
+          cpu: "500m"
+          memory: "512Mi"          

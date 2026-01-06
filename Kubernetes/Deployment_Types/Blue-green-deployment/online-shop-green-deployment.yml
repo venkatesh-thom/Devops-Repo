@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels: 
+    app: online-shop-green
+  name: online-shop-green
+  namespace: blue-green
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: online-shop-green
+  template:
+    metadata: 
+      labels: 
+        app: online-shop-green
+    spec:
+      containers:
+      - image: amitabhdevops/online_shop
+        name: online-shop-green
+        ports:
+          - protocol: TCP
+            containerPort: 3000
+        resources:
+          limits: 
+            cpu: "500m"
+            memory: "128Mi"
+
+          requests: 
+            cpu: "200m"
+            memory: "128Mi" 
+
+---
+
+apiVersion: v1 
+kind: Service
+metadata: 
+  name: online-shop-green-deployment-service
+  namespace: blue-green
+spec: 
+  selector:
+    app: online-shop-green
+  type: NodePort
+  ports:
+  - protocol: TCP
+    port: 3000
+    targetPort: 3000
+    nodePort: 30000
+
+
+        
+    
+        
+  
+    
+    
+
+  
+
