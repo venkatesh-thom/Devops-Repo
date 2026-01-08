@@ -1,4 +1,4 @@
-# Day 24: High Available/Scalable Infrastructure Deployment 
+# High Available/Scalable Infrastructure Deployment 
 
 ## 📋 Project Overview
 
@@ -15,14 +15,17 @@ Production-grade, highly available Django application deployed on AWS using Terr
 
 ## 🏗️ Architecture
 
-![Multi AZ Architecture](image.png)
-
 
 ```
 Internet → ALB (Public) → EC2 Instances (Private) → NAT Gateways → Internet
                                 ↓
                           Django Docker App
 ```
+
+## image
+
+![Multi AZ Architecture](image.png)
+
 
 ### Components
 
