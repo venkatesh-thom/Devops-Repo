@@ -11,6 +11,7 @@ resource "aws_s3_bucket" "my_bucket" {
   }
 }
 
+### Keeps multiple versions of same object of file.txt (v1), file.txt(v2)
 resource "aws_s3_bucket_versioning" "my_bucket" {
   bucket = aws_s3_bucket.my_bucket.id
 
@@ -19,13 +20,11 @@ resource "aws_s3_bucket_versioning" "my_bucket" {
   }
 }
 
-resource "aws_s3_bucket_acl" "my_bucket" {
-  bucket = aws_s3_bucket.my_bucket.id
-  acl    = "private"
 
-  depends_on = [aws_s3_bucket_ownership_controls.my_bucket]
-}
 
+
+
+### Ownership Controls ###
 resource "aws_s3_bucket_ownership_controls" "my_bucket" {
   bucket = aws_s3_bucket.my_bucket.id
 
@@ -33,6 +32,25 @@ resource "aws_s3_bucket_ownership_controls" "my_bucket" {
     object_ownership = "BucketOwnerPreferred"
   }
 }
+
+# 👉 Why this exists becasue it's Controls who owns uploaded objects.
+
+# 👉 BucketOwnerPreferred
+
+# If someone else uploads object:
+# 👉 Bucket owner still owns it
+
+
+### Bucket ACL [Only bucket owner can access]
+resource "aws_s3_bucket_acl" "my_bucket" {
+  bucket = aws_s3_bucket.my_bucket.id
+  acl    = "private"
+
+  depends_on = [aws_s3_bucket_ownership_controls.my_bucket]
+}
+
+
+#### Block All Public Access
 
 resource "aws_s3_bucket_public_access_block" "my_bucket" {
   bucket = aws_s3_bucket.my_bucket.id
@@ -42,6 +60,8 @@ resource "aws_s3_bucket_public_access_block" "my_bucket" {
   ignore_public_acls      = true
   restrict_public_buckets = true
 }
+
+### Server-Side Encryption
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "my_bucket" {
   bucket = aws_s3_bucket.my_bucket.id

@@ -1,3 +1,5 @@
+### Auto Scaling Group of blueprint for EC2 instances.
+
 resource "aws_launch_template" "app" {
   name_prefix   = "app-launch-template-"
   image_id      = var.ami_id

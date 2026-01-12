@@ -1,12 +1,14 @@
+##### VPC #####
 resource "aws_vpc" "main" {
   cidr_block           = var.vpc_cidr
-  enable_dns_support   = true
-  enable_dns_hostnames = true
+  enable_dns_support   = true #needed for internal DNS resolution
+  enable_dns_hostnames = true #needed for EC2 public DNS names
   tags = {
     Name = "main-vpc"
   }
 }
 
+##### Public Subnet #####
 resource "aws_subnet" "public" {
   count                   = var.public_subnet_count
   vpc_id                  = aws_vpc.main.id
@@ -18,6 +20,7 @@ resource "aws_subnet" "public" {
   }
 }
 
+### Private Subnets ###
 resource "aws_subnet" "private" {
   count             = var.private_subnet_count
   vpc_id            = aws_vpc.main.id
@@ -28,6 +31,7 @@ resource "aws_subnet" "private" {
   }
 }
 
+##Public Route Table 
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
   tags = {
@@ -35,18 +39,21 @@ resource "aws_route_table" "public" {
   }
 }
 
+## Internet Route for Public Subnets
 resource "aws_route" "public" {
   route_table_id         = aws_route_table.public.id
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.main.id
 }
 
+##Associate Public Subnets to Public Route Table
 resource "aws_route_table_association" "public" {
   count          = var.public_subnet_count
   subnet_id      = aws_subnet.public[count.index].id
   route_table_id = aws_route_table.public.id
 }
 
+#Internet Gateway
 resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
   tags = {

@@ -24,7 +24,7 @@ resource "aws_security_group" "alb_sg" {
     description = "Allow all outbound"
     from_port   = 0
     to_port     = 0
-    protocol    = "-1"
+    protocol    = "-1" ### Allow outbound traffic on any protocol and any port (or) This instance can send traffic to any IP, any port, any protocol.
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -59,7 +59,7 @@ resource "aws_security_group" "app_sg" {
     description = "Allow all outbound (for updates via NAT)"
     from_port   = 0
     to_port     = 0
-    protocol    = "-1"
+    protocol    = "-1" ### Allow outbound traffic on any protocol and any port (or) This instance can send traffic to any IP, any port, any protocol.
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -75,17 +75,17 @@ resource "aws_security_group" "allow_ssh" {
   vpc_id      = aws_vpc.main.id
 
   ingress {
-    description = "SSH from anywhere - CHANGE THIS"
+    description = "SSH only from my public IP"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] # TODO: Change to your IP: ["YOUR_IP/32"]
+    cidr_blocks = ["103.174.110.129/32"] # TODO: Change to your IP: ["YOUR_IP/32"]
   }
 
   egress {
     from_port   = 0
     to_port     = 0
-    protocol    = "-1"
+    protocol    = "-1" ### Allow outbound traffic on any protocol and any port (or) This instance can send traffic to any IP, any port, any protocol.
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -110,7 +110,7 @@ resource "aws_security_group" "allow_http" {
   egress {
     from_port   = 0
     to_port     = 0
-    protocol    = "-1"
+    protocol    = "-1" ### Allow outbound traffic on any protocol and any port (or) This instance can send traffic to any IP, any port, any protocol.
     cidr_blocks = ["0.0.0.0/0"]
   }
 
